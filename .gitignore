@@ -1,0 +1,41 @@
+# Gradle / Android build outputs
+.gradle/
+build/
+app/build/
+**/build/
+**/out/
+**/dist/
+
+# Local IDE / machine files
+local.properties
+*.iml
+.idea/
+.DS_Store
+
+# Logs and temp files
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Dependency/generated folders
+node_modules/
+
+# Binary artifacts should be uploaded by CI, not committed
+*.apk
+*.aab
+*.zip
+*.jar
+*.so
+*.exe
+*.dll
+*.dylib
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.pdf
+*.docx
+*.xlsx
