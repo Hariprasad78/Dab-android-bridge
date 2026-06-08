@@ -7,11 +7,6 @@ android {
     namespace = "com.harry.dabagent"
     compileSdk = 35
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
     defaultConfig {
         applicationId = "com.harry.dabagent"
         minSdk = 23
@@ -20,10 +15,6 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-}
-
-kotlin {
-    jvmToolchain(17)
 }
 
 dependencies {
