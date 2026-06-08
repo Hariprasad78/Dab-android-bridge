@@ -1,0 +1,62 @@
+name: Android Build
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.14.4'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android platform
+        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+
+      - name: Clean
+        run: gradle clean
+
+      - name: Unit tests
+        run: gradle testDebugUnitTest
+
+      - name: Assemble debug APK
+        run: gradle assembleDebug
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: DabDeviceAgent-debug-${{ github.run_number }}
+          path: app/build/outputs/apk/debug/*.apk
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DabDeviceAgent-test-reports-${{ github.run_number }}
+          path: app/build/reports/tests/
+
+      # Tags starting with v build the same unsigned debug APK for now. Signed release APK/AAB
+      # generation can be added here later with signingConfig and repository secrets.
+      - name: Tagged build note
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: echo "Release tag detected; upload-artifact contains the unsigned debug APK."
